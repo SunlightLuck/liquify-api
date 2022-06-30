@@ -37,6 +37,18 @@ const schema = new Schema(
             type: Boolean,
             default: () => false,
         },
+        liquifyData: {
+            monthlyRewards: [
+                {
+                    date: {
+                        type: String
+                    },
+                    reward: {
+                        type:Number
+                    }
+                }
+            ]
+        }
     },
     { versionKey: false, timestamps: true },
 );

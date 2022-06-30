@@ -7,12 +7,19 @@ const typeDefs = gql`
   type Query {
     getTest(str: String!): User!,
     signin(email: String!, password: String!): User!,
-    googleSignin(email: String!): User!
+    googleSignin(email: String!): User!,
+    getMonthlyRewards(email: String!): [DailyReward!]
   }
 
   type Mutation {
     signup(userInput: UserInput!): User!,
-    addAddress(addressInput: AddressInput!): String!
+    addAddress(addressInput: AddressInput!): String!,
+    setMonthlyRewards(email:String!, montlyRewards: [DailyReward!]): String!
+  }
+
+  type DailyReward {
+    date: String!,
+    reward: Float!
   }
 
   type User {
@@ -84,6 +91,17 @@ const resolvers = {
       } catch(err) {
         throw err;
       }
+    },
+    getMonthlyRewards: async (parent, {email}) => {
+      try {
+        const user = await UserModel.findOne({email: addressInput.email})
+        if(!user) {
+          throw new Error('User does not exist')
+        }
+        return user.liquifyData.monthlyRewards;
+      } catch(err) {
+        throw err;
+      }
     }
   },
   Mutation: {
@@ -118,6 +136,19 @@ const resolvers = {
         return addressInput.address;
       } catch (err) {
         throw err
+      }
+    },
+    setMonthlyRewards: async (parent, {email, monthlyRewards}) => {
+      try {
+        const user = await UserModel.findOne({email: addressInput.email})
+        if(!user) {
+          throw new Error('User does not exist')
+        }
+        user.liquifyData.monthlyRewards = monthlyRewards;
+        await user.save();
+        return 'Success'
+      } catch(err) {
+        throw err;
       }
     }
   }
