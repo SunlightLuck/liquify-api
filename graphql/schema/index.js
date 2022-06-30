@@ -14,7 +14,7 @@ const typeDefs = gql`
   type Mutation {
     signup(userInput: UserInput!): User!,
     addAddress(addressInput: AddressInput!): String!,
-    setMonthlyRewards(email:String!, montlyRewards: MonthlyRewardsInput!): String!
+    setMonthlyRewards(email:String!, montlyRewards: [DailyRewardInput!]): String!
   }
 
   type DailyReward {
@@ -100,7 +100,7 @@ const resolvers = {
     },
     getMonthlyRewards: async (parent, {email}) => {
       try {
-        const user = await UserModel.findOne({email: addressInput.email})
+        const user = await UserModel.findOne({email})
         if(!user) {
           throw new Error('User does not exist')
         }
@@ -146,7 +146,7 @@ const resolvers = {
     },
     setMonthlyRewards: async (parent, {email, monthlyRewards}) => {
       try {
-        const user = await UserModel.findOne({email: addressInput.email})
+        const user = await UserModel.findOne({email})
         if(!user) {
           throw new Error('User does not exist')
         }
