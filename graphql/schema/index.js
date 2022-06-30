@@ -5,21 +5,25 @@ const setHomeData = require('../../controllers/LiquifyController');
 
 const typeDefs = gql`
   type Query {
-    getTest(str: String!): User!,
+    getTest(str: String!): [String!],
     signin(email: String!, password: String!): User!,
     googleSignin(email: String!): User!,
-    getMonthlyRewards(email: String!): [DailyReward!]
+    getMonthlyRewards(email: String!): MonthlyRewards!
   }
 
   type Mutation {
     signup(userInput: UserInput!): User!,
     addAddress(addressInput: AddressInput!): String!,
-    setMonthlyRewards(email:String!, montlyRewards: [DailyReward!]): String!
+    setMonthlyRewards(email:String!, montlyRewards: MonthlyRewardsInput!): String!
   }
 
   type DailyReward {
     date: String!,
     reward: Float!
+  }
+
+  type MonthlyRewards {
+    montlyRewards: [DailyReward!]
   }
 
   type User {
@@ -56,19 +60,21 @@ const typeDefs = gql`
     email: String!,
     address: String!
   }
+
+  input DailyRewardInput {
+    date: String!,
+    reward: Float!
+  }
+
+  input MonthlyRewardsInput {
+    montlyRewards: [DailyRewardInput!]
+  }
 `
 
 const resolvers = {
   Query: {
     getTest: (parent, str) => (
-      {
-        _id: "1",
-        firstName: "as",
-        lastName: "23",
-        email: "12",
-        phone: "12",
-        addresses: []
-      }
+      ["123", "123"]
     ),
     signin: async (parent, {email, password}) => {
       try {
