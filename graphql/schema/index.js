@@ -14,7 +14,7 @@ const typeDefs = gql`
   type Mutation {
     signup(userInput: UserInput!): User!,
     addAddress(addressInput: AddressInput!): String!,
-    setMonthlyRewards(email:String!, montlyRewards: [DailyRewardInput!]): String!
+    setMonthlyRewards(email:String!, monthlyRewards: [DailyRewardInput!]): String!
   }
 
   type DailyReward {
@@ -23,7 +23,7 @@ const typeDefs = gql`
   }
 
   type MonthlyRewards {
-    montlyRewards: [DailyReward!]
+    monthlyRewards: [DailyReward!]
   }
 
   type User {
@@ -65,10 +65,6 @@ const typeDefs = gql`
     date: String!,
     reward: Float!
   }
-
-  input MonthlyRewardsInput {
-    montlyRewards: [DailyRewardInput!]
-  }
 `
 
 const resolvers = {
@@ -104,7 +100,7 @@ const resolvers = {
         if(!user) {
           throw new Error('User does not exist')
         }
-        return user.liquifyData.monthlyRewards;
+        return {monthlyRewards: user.liquifyData.monthlyRewards};
       } catch(err) {
         throw err;
       }
